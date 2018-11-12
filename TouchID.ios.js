@@ -30,8 +30,8 @@ export default {
     const DEFAULT_CONFIG = {
       fallbackLabel: null,
       unifiedErrors: false,
-      passcodeFallback: false
     };
+
     const authReason = reason ? reason : ' ';
     const authConfig = Object.assign({}, DEFAULT_CONFIG, config);
 
