@@ -14,18 +14,6 @@ const { getError, TouchIDError, TouchIDUnifiedError } = require('./errors');
  */
 
 export default {
-  isSupported(config) {
-    return new Promise((resolve, reject) => {
-      NativeTouchID.isSupported((error, biometryType) => {
-        if (error) {
-          return reject(createError(config, error.message));
-        }
-
-        resolve(biometryType);
-      });
-    });
-  },
-
   authenticate(reason, config) {
     const DEFAULT_CONFIG = {
       fallbackLabel: null,

@@ -26,16 +26,12 @@ RCT_EXPORT_METHOD(authenticate: (NSString *)reason
 }
 
 - (void)handleAttemptToUseDeviceIDWithSuccess:(BOOL)success error:(NSError *)error callback:(RCTResponseSenderBlock)callback {
-    if (success) { // Authentication Successful
+    if (success) {
         callback(@[[NSNull null], @"Authenticated with Touch ID."]);
-    } else if (error) { // Authentication Error
+    } else if (error) {
         NSString *errorReason;
         
         switch (error.code) {
-            case LAErrorAuthenticationFailed:
-                errorReason = @"LAErrorAuthenticationFailed";
-                break;
-                
             case LAErrorUserCancel:
                 errorReason = @"LAErrorUserCancel";
                 break;
@@ -61,32 +57,13 @@ RCT_EXPORT_METHOD(authenticate: (NSString *)reason
                 break;
                 
             default:
-                errorReason = @"RCTTouchIDUnknownError";
+                errorReason = @"LAErrorAuthenticationFailed";
                 break;
         }
         
         NSLog(@"Authentication failed: %@", errorReason);
         callback(@[RCTMakeError(errorReason, nil, nil)]);
-    } else { // Authentication Failure
-        callback(@[RCTMakeError(@"LAErrorAuthenticationFailed", nil, nil)]);
     }
-}
-
-- (NSString *)getBiometryType:(LAContext *)context
-{
-    if (@available(iOS 11, *)) {
-        if (context.biometryType == LABiometryTypeFaceID) {
-            return @"FaceID";
-        }
-        else if (context.biometryType == LABiometryTypeTouchID) {
-            return @"TouchID";
-        }
-        else if (context.biometryType == LABiometryNone) {
-            return @"None";
-        }
-    }
-
-    return @"TouchID";
 }
 
 @end
